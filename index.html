@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doni Andika — Design-led Digital Marketer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+:root{
+  --white:#FFFFFF;--off:#F8F7F5;--border:#EBEBEB;--border-soft:#F3F3F3;
+  --ink:#0A0A0A;--ink-2:#444444;--ink-3:#999999;--ink-4:#CCCCCC;
+  --blue:#1B4F91;--blue-light:#E8F0FB;--blue-mid:#2563B8;
+  --green:#22C55E;--font-sans:'Inter',sans-serif;--font-serif:'DM Serif Display',serif;
+  --nav-h:60px;--max:1080px;--r:8px;--rl:14px
+}
+body{font-family:var(--font-sans);background:var(--white);color:var(--ink);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── KEYFRAMES — ALL DEFINED ── */
+@keyframes splashIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes splashBar{from{opacity:0;transform:scaleX(0)}to{opacity:1;transform:scaleX(1)}}
+@keyframes splashOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-30px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+@keyframes fadeLeft{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@keyframes ping{0%,100%{box-shadow:0 0 0 3px rgba(34,197,94,.15)}50%{box-shadow:0 0 0 7px rgba(34,197,94,.04)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.5)}}
+@keyframes floatUp{0%{opacity:0;transform:translateY(0) scale(.5)}10%{opacity:.12}90%{opacity:.04}100%{opacity:0;transform:translateY(-100vh) scale(1.4)}}
+
+/* ── SPLASH ── */
+#splash{position:fixed;inset:0;background:var(--ink);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;pointer-events:none;transition:opacity .35s ease,transform .35s ease}
+#splash.hide{opacity:0;transform:translateY(-24px);pointer-events:none}
+.s-logo{font-family:var(--font-serif);font-size:64px;color:var(--white);opacity:0;animation:splashIn .45s .1s ease forwards}
+.s-sub{font-size:11px;letter-spacing:3px;color:#555;text-transform:uppercase;opacity:0;animation:splashIn .45s .28s ease forwards}
+.s-bar{width:36px;height:2px;background:var(--blue);transform-origin:left;opacity:0;animation:splashBar .38s .46s ease forwards}
+
+/* ── PARTICLES ── */
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.particle{position:absolute;border-radius:50%;background:var(--blue);opacity:0;animation:floatUp linear infinite}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:transparent;border-bottom:0.5px solid transparent;z-index:100;display:flex;align-items:center;transition:background .3s,border-color .3s,backdrop-filter .3s}
+nav.scrolled{background:rgba(255,255,255,.93);backdrop-filter:blur(14px);border-bottom-color:var(--border)}
+.nav-inner{max-width:var(--max);width:100%;margin:0 auto;padding:0 36px;display:flex;justify-content:space-between;align-items:center}
+.nav-logo{display:flex;align-items:center;gap:9px}
+.nav-dot{width:7px;height:7px;background:var(--blue);border-radius:50%}
+nav.scrolled .nav-dot{animation:pulse 2.5s ease infinite}
+.nav-name{font-size:13px;font-weight:600;letter-spacing:.2px}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-size:12px;color:var(--ink-3);transition:color .15s;letter-spacing:.3px;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--blue);transition:width .22s}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-links a:hover,.nav-links a.active{color:var(--ink)}
+.nav-cta{font-size:12px;font-weight:500;background:var(--blue);color:var(--white);padding:8px 18px;border-radius:var(--r);border:none;cursor:pointer;transition:background .15s,transform .1s}
+.nav-cta:hover{background:var(--blue-mid);transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{width:22px;height:1.5px;background:var(--ink);display:block;transition:all .25s}
+
+/* ── HERO ENTRY ANIMATIONS — JS class-triggered ── */
+.hero-avail,.hero-headline,.hero-sub,.hero-cta,.hero-stats,.nav-logo,.nav-links,.nav-cta,.hero-right{opacity:0}
+.hero-avail.in{animation:fadeUp .5s ease forwards}
+.hero-headline.in{animation:fadeUp .58s ease forwards}
+.hero-sub.in{animation:fadeUp .55s ease forwards}
+.hero-cta.in{animation:fadeUp .5s ease forwards}
+.hero-stats.in{animation:fadeUp .5s ease forwards}
+.nav-logo.in{animation:fadeDown .45s ease forwards}
+.nav-links.in{animation:fadeDown .45s ease forwards}
+.nav-cta.in{animation:fadeDown .45s ease forwards}
+.hero-right.in{animation:fadeLeft .6s ease forwards}
+
+/* ── LAYOUT ── */
+.container{max-width:var(--max);margin:0 auto;padding:0 36px;position:relative;z-index:1}
+section{padding:80px 0}
+.section-label{font-size:10px;letter-spacing:2.5px;color:var(--ink-4);text-transform:uppercase;margin-bottom:40px;display:flex;align-items:center;gap:12px}
+.section-label::after{content:'';flex:1;height:0.5px;background:var(--border)}
+
+/* ── HERO ── */
+#hero{padding-top:calc(var(--nav-h) + 72px);padding-bottom:80px;border-bottom:0.5px solid var(--border);position:relative;overflow:hidden}
+#hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(27,79,145,.05) 0%,transparent 70%);pointer-events:none;animation:breathe 7s ease-in-out infinite}
+.hero-grid{display:grid;grid-template-columns:1fr 280px;gap:48px;align-items:start}
+.hero-avail{display:flex;align-items:center;gap:7px;margin-bottom:24px}
+.hero-avail-dot{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:0 0 0 3px rgba(34,197,94,.15);animation:ping 2.5s ease infinite}
+.hero-avail-txt{font-size:11px;color:var(--ink-3);letter-spacing:.3px}
+.hero-headline{font-family:var(--font-serif);font-size:56px;line-height:1.0;color:var(--ink);margin-bottom:8px;letter-spacing:-.5px}
+.hero-headline em{color:var(--blue);font-style:italic}
+.hero-sub{font-size:15px;color:var(--ink-2);line-height:1.75;max-width:460px;margin-bottom:32px}
+.hero-cta{display:flex;gap:12px;align-items:center;margin-bottom:52px;flex-wrap:wrap}
+.btn-primary{background:var(--blue);color:var(--white);font-size:13px;font-weight:500;padding:13px 24px;border-radius:var(--r);border:none;cursor:pointer;transition:background .15s,transform .15s,box-shadow .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary:hover{background:var(--blue-mid);transform:translateY(-2px);box-shadow:0 8px 24px rgba(27,79,145,.25)}
+.btn-primary:active{transform:translateY(0)}
+.btn-secondary{background:transparent;color:var(--ink-2);font-size:13px;padding:13px 24px;border-radius:var(--r);border:0.5px solid var(--border);cursor:pointer;transition:border-color .15s,color .15s,transform .15s}
+.btn-secondary:hover{border-color:var(--ink-3);color:var(--ink);transform:translateY(-2px)}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:0.5px solid var(--border);padding-top:32px}
+.hero-stat{padding-right:24px;border-right:0.5px solid var(--border)}
+.hero-stat:last-child{border-right:none;padding-right:0}
+.hero-stat+.hero-stat{padding-left:24px}
+.hero-stat-n{font-size:30px;font-weight:800;color:var(--ink);letter-spacing:-1.5px;line-height:1;margin-bottom:4px}
+.hero-stat-l{font-size:10px;color:var(--ink-4);letter-spacing:.3px;line-height:1.4}
+
+/* ── 3D PHOTO ── */
+.hero-right{display:flex;flex-direction:column;align-items:flex-end;gap:16px;padding-top:12px}
+.photo-3d-wrap{perspective:900px;width:220px;height:268px;cursor:pointer}
+.photo-3d{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .12s ease-out}
+.photo-3d-inner{width:100%;height:100%;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--border);position:relative;background:var(--off)}
+.photo-3d-inner img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.photo-3d-shine{position:absolute;inset:0;border-radius:var(--rl);background:linear-gradient(135deg,rgba(255,255,255,.14) 0%,transparent 60%);pointer-events:none}
+.photo-corner-tl{position:absolute;top:-1px;left:-1px;width:26px;height:26px;border-top:2px solid var(--blue);border-left:2px solid var(--blue);border-radius:var(--rl) 0 0 0;pointer-events:none}
+.photo-corner-br{position:absolute;bottom:-1px;right:-1px;width:26px;height:26px;border-bottom:2px solid var(--blue);border-right:2px solid var(--blue);border-radius:0 0 var(--rl) 0;pointer-events:none}
+.photo-badge{position:absolute;bottom:12px;left:12px;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-radius:6px;padding:5px 10px;font-size:10px;font-weight:600;color:var(--ink);letter-spacing:.3px;border:0.5px solid rgba(0,0,0,.06)}
+.hero-meta{text-align:right}
+.hero-meta-city{font-size:11px;color:var(--ink-3);letter-spacing:.5px}
+.hero-meta-role{font-size:11px;color:var(--ink-4);margin-top:2px}
+
+/* ── ABOUT ── */
+#about{border-bottom:0.5px solid var(--border)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.about-left h2{font-family:var(--font-serif);font-size:36px;color:var(--ink);line-height:1.2;margin-bottom:20px}
+.about-left h2 em{color:var(--blue);font-style:italic}
+.about-body{font-size:14px;color:var(--ink-2);line-height:1.8;margin-bottom:14px}
+.about-highlight{font-size:14px;color:var(--blue);font-weight:500;margin-top:4px}
+.about-skills-title{font-size:11px;font-weight:600;color:var(--ink);letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px}
+.skill-list{display:flex;flex-direction:column}
+.skill-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:0.5px solid var(--border-soft)}
+.skill-row:last-child{border-bottom:none}
+.skill-name{font-size:13px;color:var(--ink-2)}
+.skill-tags{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.skill-tag{font-size:10px;color:var(--blue);background:var(--blue-light);padding:3px 8px;border-radius:3px;letter-spacing:.2px;transition:transform .15s}
+.skill-tag:hover{transform:scale(1.06)}
+
+/* ── SERVICES ── */
+#services{background:var(--off);border-bottom:0.5px solid var(--border)}
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);border:0.5px solid var(--border);border-radius:var(--rl);overflow:hidden;background:var(--white)}
+.svc-card{padding:28px 22px 32px;border-right:0.5px solid var(--border);transition:background .2s}
+.svc-card:last-child{border-right:none}
+.svc-card:hover{background:var(--off)}
+.svc-num{font-size:10px;color:var(--blue);font-weight:600;letter-spacing:1px;margin-bottom:14px}
+.svc-icon{width:32px;height:32px;border:0.5px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;transition:border-color .2s,background .2s}
+.svc-card:hover .svc-icon{background:var(--blue-light);border-color:var(--blue)}
+.svc-dot{width:6px;height:6px;background:var(--blue);border-radius:50%}
+.svc-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px;line-height:1.3}
+.svc-desc{font-size:11px;color:var(--ink-3);line-height:1.7}
+
+/* ── SELECTED WORK ── */
+#portfolio{border-bottom:0.5px solid var(--border)}
+.portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.p-card{border:0.5px solid var(--border);border-radius:var(--rl);overflow:hidden;transition:transform .25s,border-color .2s,box-shadow .25s;cursor:pointer}
+.p-card:hover{transform:translateY(-6px);border-color:var(--ink-3);box-shadow:0 16px 40px rgba(0,0,0,.08)}
+.p-img{overflow:hidden}
+.p-img img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;transition:transform .4s ease}
+.p-card:hover .p-img img{transform:scale(1.06)}
+.p-body{padding:16px 18px 20px}
+.p-tag{font-size:10px;color:var(--blue);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px}
+.p-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:5px;line-height:1.3}
+.p-desc{font-size:11px;color:var(--ink-3);line-height:1.6;margin-bottom:10px}
+.p-result{font-size:10px;color:var(--blue);background:var(--blue-light);padding:3px 9px;border-radius:3px;display:inline-block}
+.p-hint{font-size:10px;color:var(--ink-4);margin-top:8px;transition:color .15s}
+.p-card:hover .p-hint{color:var(--blue)}
+
+/* ── LIGHTBOX ── */
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:999;align-items:center;justify-content:center;padding:24px}
+.lb.open{display:flex}
+.lb.open .lb-inner{animation:fadeUp .28s ease forwards}
+.lb-inner{background:var(--white);border-radius:var(--rl);overflow:hidden;max-width:860px;width:100%;max-height:90vh;display:flex;flex-direction:column;opacity:0}
+.lb-img-wrap img{width:100%;max-height:440px;object-fit:cover;display:block}
+.lb-body{padding:24px 28px;overflow-y:auto}
+.lb-tag{font-size:10px;color:var(--blue);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
+.lb-title{font-family:var(--font-serif);font-size:24px;color:var(--ink);margin-bottom:10px}
+.lb-desc{font-size:13px;color:var(--ink-2);line-height:1.8;margin-bottom:14px}
+.lb-result{font-size:12px;color:var(--blue);background:var(--blue-light);padding:5px 12px;border-radius:3px;display:inline-block;font-weight:500}
+.lb-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:var(--white);border-radius:50%;border:none;cursor:pointer;font-size:16px;color:var(--ink);display:flex;align-items:center;justify-content:center;z-index:1000;transition:transform .2s}
+.lb-close:hover{transform:rotate(90deg)}
+
+/* ── GALLERY ── */
+#gallery{background:var(--off);border-bottom:0.5px solid var(--border)}
+.gallery-filter{display:flex;gap:6px;margin-bottom:32px;flex-wrap:wrap}
+.gf-btn{font-size:11px;color:var(--ink-3);background:transparent;border:0.5px solid var(--border);padding:6px 16px;border-radius:20px;cursor:pointer;transition:all .2s}
+.gf-btn:hover{border-color:var(--ink-3);color:var(--ink)}
+.gf-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g-card{border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--white);cursor:pointer;transition:border-color .2s,transform .25s,box-shadow .25s}
+.g-card:hover{border-color:var(--ink-3);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.07)}
+.g-img{overflow:hidden}
+.g-img img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform .4s ease}
+.g-card:hover .g-img img{transform:scale(1.06)}
+.g-body{padding:10px 12px 12px}
+.g-cat{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:3px;font-weight:600}
+.g-title{font-size:12px;color:var(--ink);font-weight:500;line-height:1.3}
+
+/* ── CASES ── */
+#cases{border-bottom:0.5px solid var(--border)}
+.case-card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--rl);padding:32px 36px;margin-bottom:16px;transition:box-shadow .2s}
+.case-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.06)}
+.case-card:last-child{margin-bottom:0}
+.case-header{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start;margin-bottom:24px;padding-bottom:22px;border-bottom:0.5px solid var(--border)}
+.case-company{font-size:10px;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+.case-title{font-family:var(--font-serif);font-size:24px;color:var(--ink);line-height:1.2}
+.case-period{font-size:11px;color:var(--ink-4);text-align:right;white-space:nowrap}
+.case-badge{background:var(--blue-light);color:var(--blue);font-size:12px;font-weight:600;padding:5px 12px;border-radius:var(--r);margin-top:6px;display:inline-block}
+.case-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.case-blabel{font-size:9px;font-weight:600;letter-spacing:1.5px;color:var(--ink-4);text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.case-bdot{width:4px;height:4px;background:var(--blue);border-radius:50%;flex-shrink:0}
+.case-bbody{font-size:12px;color:var(--ink-2);line-height:1.7}
+
+/* ── WRITING ── */
+#writing{background:var(--off);border-bottom:0.5px solid var(--border)}
+.writing-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.w-card{border:0.5px solid var(--border);border-radius:var(--rl);padding:26px 28px;background:var(--white);transition:border-color .2s,transform .2s,box-shadow .2s}
+.w-card:hover{border-color:var(--ink-3);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+.w-platform{display:flex;align-items:center;gap:7px;margin-bottom:14px}
+.w-pdot{width:6px;height:6px;background:var(--blue);border-radius:50%}
+.w-plabel{font-size:10px;color:var(--blue);letter-spacing:1px;text-transform:uppercase;font-weight:600}
+.w-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.4}
+.w-excerpt{font-size:12px;color:var(--ink-3);line-height:1.8;margin-bottom:14px}
+.w-excerpt strong{color:var(--ink-2);font-weight:500}
+.w-divider{height:0.5px;background:var(--border);margin-bottom:12px}
+.w-tags{display:flex;gap:5px;flex-wrap:wrap}
+.w-tag{font-size:10px;color:var(--ink-3);border:0.5px solid var(--border);padding:3px 9px;border-radius:3px;transition:border-color .15s,color .15s}
+.w-tag:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ── CONTACT ── */
+#contact{background:var(--ink);color:var(--white);padding:80px 0;position:relative;overflow:hidden}
+#contact::before{content:'';position:absolute;bottom:-100px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(27,79,145,.18) 0%,transparent 70%);pointer-events:none}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.contact-hl{font-family:var(--font-serif);font-size:42px;color:var(--white);line-height:1.15;margin-bottom:14px}
+.contact-hl em{color:#5b8fd4;font-style:italic}
+.contact-sub{font-size:14px;color:#888;line-height:1.7;margin-bottom:28px}
+.contact-links{display:flex;flex-direction:column;gap:10px}
+.c-link{display:flex;align-items:center;gap:12px;padding:14px 18px;background:#141414;border:0.5px solid #222;border-radius:var(--r);transition:border-color .2s,transform .2s}
+.c-link:hover{border-color:#444;transform:translateX(4px)}
+.c-icon{width:30px;height:30px;background:#1e1e1e;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.c-icon-dot{width:5px;height:5px;background:var(--blue);border-radius:50%}
+.c-lbl{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1px}
+.c-val{font-size:13px;color:#ccc}
+.contact-right{display:flex;flex-direction:column;gap:10px}
+.c-cta-main{background:var(--white);color:var(--ink);font-size:14px;font-weight:600;padding:18px;border-radius:var(--r);border:none;cursor:pointer;width:100%;transition:background .15s,transform .15s}
+.c-cta-main:hover{background:#f0f0f0;transform:translateY(-2px)}
+.c-cta-sec{background:transparent;color:#666;font-size:13px;padding:14px;border-radius:var(--r);border:0.5px solid #222;cursor:pointer;width:100%;transition:border-color .2s,color .2s}
+.c-cta-sec:hover{border-color:#444;color:#999}
+.c-note{font-size:11px;color:#444;text-align:center;margin-top:2px}
+
+/* ── FOOTER ── */
+footer{background:var(--ink);border-top:0.5px solid #1a1a1a;padding:18px 0}
+.footer-inner{max-width:var(--max);margin:0 auto;padding:0 36px;display:flex;justify-content:space-between;align-items:center}
+.footer-copy,.footer-right{font-size:11px;color:#444}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .52s ease,transform .52s ease}
+.reveal.in{opacity:1;transform:none}
+.reveal-l{opacity:0;transform:translateX(-22px);transition:opacity .52s ease,transform .52s ease}
+.reveal-l.in{opacity:1;transform:none}
+.reveal-r{opacity:0;transform:translateX(22px);transition:opacity .52s ease,transform .52s ease}
+.reveal-r.in{opacity:1;transform:none}
+.stagger>*{opacity:0;transform:translateY(18px);transition:opacity .42s ease,transform .42s ease}
+.stagger.in>*:nth-child(1){opacity:1;transform:none;transition-delay:.04s}
+.stagger.in>*:nth-child(2){opacity:1;transform:none;transition-delay:.11s}
+.stagger.in>*:nth-child(3){opacity:1;transform:none;transition-delay:.18s}
+.stagger.in>*:nth-child(4){opacity:1;transform:none;transition-delay:.25s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .container{padding:0 20px}
+  .nav-inner{padding:0 20px}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .hero-grid{grid-template-columns:1fr}
+  .hero-right{display:none}
+  .hero-headline{font-size:38px}
+  .hero-stats{grid-template-columns:repeat(2,1fr);row-gap:20px}
+  .hero-stat+.hero-stat{padding-left:0}
+  .hero-stat:nth-child(2){border-right:none}
+  .about-grid{grid-template-columns:1fr;gap:32px}
+  .services-grid{grid-template-columns:1fr 1fr}
+  .svc-card:nth-child(2){border-right:none}
+  .svc-card:nth-child(3){border-top:0.5px solid var(--border)}
+  .portfolio-grid,.writing-grid{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .case-grid{grid-template-columns:1fr 1fr;gap:14px}
+  .contact-grid{grid-template-columns:1fr;gap:36px}
+  .footer-inner{flex-direction:column;gap:6px;text-align:center}
+  .lb-inner{max-height:95vh}
+  #hero::before{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .reveal,.reveal-l,.reveal-r,.stagger>*,
+  .hero-avail,.hero-headline,.hero-sub,.hero-cta,.hero-stats,.nav-logo,.nav-links,.nav-cta,.hero-right
+  {opacity:1!important;transform:none!important;transition:none!important;animation:none!important}
+  #splash{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="s-logo">DA</div>
+  <div class="s-sub">Design-led Digital Marketer</div>
+  <div class="s-bar"></div>
+</div>
+
+<!-- PARTICLES -->
+<div id="particles"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="nav-dot"></div>
+      <span class="nav-name">Doni Andika</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#portfolio">Work</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#cases">Cases</a></li>
+      <li><a href="#writing">Writing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="mailto:doniandika7117@gmail.com"><button class="nav-cta">Get in touch</button></a>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-avail">
+          <div class="hero-avail-dot"></div>
+          <span class="hero-avail-txt">Open to opportunities · Medan, Indonesia</span>
+        </div>
+        <h1 class="hero-headline">Design-led<br><em>Digital</em><br>Marketer.</h1>
+        <p class="hero-sub">I turn complex ideas into content that works — combining eight years of design craft with content strategy to build presence, trust, and growth for brands across digital platforms.</p>
+        <div class="hero-cta">
+          <a href="#portfolio"><button class="btn-primary">View My Work ↗</button></a>
+          <a href="Doni_Andika_CV.docx" download><button class="btn-secondary">Download CV</button></a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="hero-stat-n" data-count="8" data-suffix="yr">0</div><div class="hero-stat-l">Years<br>experience</div></div>
+          <div class="hero-stat"><div class="hero-stat-n" data-count="10" data-suffix="+">0</div><div class="hero-stat-l">Brands<br>managed</div></div>
+          <div class="hero-stat"><div class="hero-stat-n" data-count="129" data-suffix="K">0</div><div class="hero-stat-l">Followers<br>grown</div></div>
+          <div class="hero-stat"><div class="hero-stat-n" data-count="1500" data-suffix="+">0</div><div class="hero-stat-l">Projects<br>delivered</div></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="photo-3d-wrap" id="photo3dWrap">
+          <div class="photo-3d" id="photo3d">
+            <div class="photo-3d-inner">
+              <img src="https://res.cloudinary.com/dnmranrbd/image/upload/q_auto/f_auto/v1781381704/1b4f5859-7529-4441-bbbb-84bb8f96b836.png" alt="Doni Andika" loading="eager" fetchpriority="high">
+              <div class="photo-3d-shine" id="photoShine"></div>
+              <div class="photo-badge">Doni Andika · Medan</div>
+            </div>
+            <div class="photo-corner-tl"></div>
+            <div class="photo-corner-br"></div>
+          </div>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-meta-city">Medan, North Sumatra</div>
+          <div class="hero-meta-role">Content · Strategy · Design</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-label">About</div>
+    <div class="about-grid">
+      <div class="reveal-l">
+        <h2>A designer who learned to<br><em>think in strategy.</em></h2>
+        <p class="about-body">I started as a Graphic Designer in commercial printing — learning the discipline of executing precisely, delivering at scale, and communicating with clients who needed results, not excuses. 1,500+ projects in three years.</p>
+        <p class="about-body">Then I moved into startups. At DEPATU, Indonesia's leading sneaker authentication platform, I wasn't just making things look good — I was building content systems that grew an audience from 23K to 129K followers. At Sakken Care, I built a brand from zero that helped a shoe cleaning service expand from 3 to 29 locations across Medan.</p>
+        <p class="about-body">Along the way I've also built websites, run my own businesses, managed social media for 10+ brands, and taught myself enough about web development to deploy production-ready sites independently.</p>
+        <p class="about-highlight">The through line: I can design it, write it, and make it work.</p>
+      </div>
+      <div class="reveal-r">
+        <div class="about-skills-title">Core Capabilities</div>
+        <div class="skill-list">
+          <div class="skill-row"><span class="skill-name">Visual Design</span><div class="skill-tags"><span class="skill-tag">Adobe Suite</span><span class="skill-tag">Canva</span><span class="skill-tag">Figma</span></div></div>
+          <div class="skill-row"><span class="skill-name">Content Strategy</span><div class="skill-tags"><span class="skill-tag">B2B</span><span class="skill-tag">LinkedIn</span></div></div>
+          <div class="skill-row"><span class="skill-name">Brand Identity</span><div class="skill-tags"><span class="skill-tag">Startup</span><span class="skill-tag">FMCG</span></div></div>
+          <div class="skill-row"><span class="skill-name">Web & Deploy</span><div class="skill-tags"><span class="skill-tag">Vercel</span><span class="skill-tag">Netlify</span></div></div>
+          <div class="skill-row"><span class="skill-name">AI-powered Workflow</span><div class="skill-tags"><span class="skill-tag">Claude</span><span class="skill-tag">ChatGPT</span><span class="skill-tag">Gemini</span></div></div>
+          <div class="skill-row"><span class="skill-name">Analytics & Reporting</span><div class="skill-tags"><span class="skill-tag">GA4</span><span class="skill-tag">LinkedIn</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="section-label">What I Do</div>
+    <div class="services-grid stagger">
+      <div class="svc-card"><div class="svc-num">01</div><div class="svc-icon"><div class="svc-dot"></div></div><div class="svc-title">Content & Copywriting</div><div class="svc-desc">LinkedIn posts, technical articles, B2B campaign copy, content calendars, and platform-specific messaging that speaks to the right audience.</div></div>
+      <div class="svc-card"><div class="svc-num">02</div><div class="svc-icon"><div class="svc-dot"></div></div><div class="svc-title">Visual Design</div><div class="svc-desc">Social media assets, marketing brochures, infographics, brand identity systems, and campaign creatives built to work across print and digital.</div></div>
+      <div class="svc-card"><div class="svc-num">03</div><div class="svc-icon"><div class="svc-dot"></div></div><div class="svc-title">Digital Marketing</div><div class="svc-desc">B2B LinkedIn strategy and management, content calendar planning, audience growth, and analytics reporting with actionable insights.</div></div>
+      <div class="svc-card"><div class="svc-num">04</div><div class="svc-icon"><div class="svc-dot"></div></div><div class="svc-title">Web & Landing Page</div><div class="svc-desc">Design and deploy modern websites, landing pages, and web apps independently — from layout to live URL via Vercel or Netlify.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SELECTED WORK -->
+<section id="portfolio">
+  <div class="container">
+    <div class="section-label">Selected Work</div>
+    <div class="portfolio-grid stagger">
+      <div class="p-card" onclick="openLB(0)">
+        <div class="p-img"><img src="https://images.unsplash.com/photo-1634084462412-b54873c0a56d?w=800&q=80&fit=crop&h=500" alt="Sakken Care Brand Identity" loading="lazy"></div>
+        <div class="p-body"><div class="p-tag">Branding · Sakken Care</div><div class="p-title">Brand Identity System from Zero</div><div class="p-desc">Full brand identity for a premium shoe care startup — logo, color system, typography, packaging, and tone of voice.</div><span class="p-result">↑ 3 → 29 drop points</span><div class="p-hint">Click to view full case ↗</div></div>
+      </div>
+      <div class="p-card" onclick="openLB(1)">
+        <div class="p-img"><img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80&fit=crop&h=500" alt="DEPATU Social Media" loading="lazy"></div>
+        <div class="p-body"><div class="p-tag">Social Media · DEPATU</div><div class="p-title">Content Strategy & Visual System</div><div class="p-desc">Content pillars, visual identity for Instagram and TikTok — growing Indonesia's leading sneaker authentication platform.</div><span class="p-result">↑ 23K → 129K followers</span><div class="p-hint">Click to view full case ↗</div></div>
+      </div>
+      <div class="p-card" onclick="openLB(2)">
+        <div class="p-img"><img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80&fit=crop&h=500" alt="Print Design" loading="lazy"></div>
+        <div class="p-body"><div class="p-tag">Print · Grafindo Digital Printing</div><div class="p-title">Commercial Print & Collateral Design</div><div class="p-desc">Banners, brochures, packaging, and business collateral across multiple industries — end-to-end production.</div><span class="p-result">1,500+ projects delivered</span><div class="p-hint">Click to view full case ↗</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lightbox" onclick="closeLBOutside(event)">
+  <button class="lb-close" onclick="closeLB()">✕</button>
+  <div class="lb-inner">
+    <div class="lb-img-wrap"><img id="lb-img" src="" alt=""></div>
+    <div class="lb-body">
+      <div class="lb-tag" id="lb-tag"></div>
+      <div class="lb-title" id="lb-title"></div>
+      <div class="lb-desc" id="lb-desc"></div>
+      <span class="lb-result" id="lb-result"></span>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-label">Design Gallery</div>
+    <div class="gallery-filter stagger">
+      <button class="gf-btn active" onclick="filterGallery('all',this)">All</button>
+      <button class="gf-btn" onclick="filterGallery('branding',this)">Branding</button>
+      <button class="gf-btn" onclick="filterGallery('social',this)">Social Media</button>
+      <button class="gf-btn" onclick="filterGallery('print',this)">Print</button>
+      <button class="gf-btn" onclick="filterGallery('web',this)">Web</button>
+      <button class="gf-btn" onclick="filterGallery('campaign',this)">Campaign</button>
+    </div>
+    <div class="gallery-grid" id="gallery-grid">
+      <div class="g-card reveal" data-cat="branding"><div class="g-img"><img src="https://images.unsplash.com/photo-1635405074683-96d6921a2a68?w=600&q=75&fit=crop&h=450" alt="" loading="lazy"></div><div class="g-body"><div class="g-cat">Branding</div><div class="g-title">Sakken Care — Logo System</div></div></div>
+      <div class="g-card reveal" data-cat="social"><div class="g-img"><img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=75&fit=crop&h=450" alt="" loading="lazy"></div><div class="g-body"><div class="g-cat">Social Media</div><div class="g-title">DEPATU — Instagram Feed</div></div></div>
+      <div class="g-card reveal" data-cat="print"><div class="g-img"><img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=600&q=75&fit=crop&h=450" alt="" loading="lazy"></div><div class="g-body"><div class="g-cat">Print</div><div class="g-title">Grafindo — Brochure Design</div></div></div>
+      <div class="g-card reveal" data-cat="campaign"><div class="g-img"><img src="https://images.unsplash.com/photo-1542744094-24638eff58bb?w=600&q=75&fit=crop&h=450" alt="" loading="lazy"></div><div class="g-body"><div class="g-cat">Campaign</div><div class="g-title">DEPATU — Product Campaign</div></div></div>
+      <div class="g-card reveal" data-cat="branding"><div class="g-img"><img src="https://images.unsplash.com/photo-1634084462412-b54873c0a56d?w=600&q=75&fit=crop&h=450" alt="" loading="lazy"></div><div class="g-body"><div class="g-cat">Branding</div><div class="g-title">Sakken Care — Packaging</div></div></div>
+      <div class="g-card reveal" data-cat="social"><div class="g-img"><img src="https://images.unsplash.com/photo-1610484826967-09c5720778c7?w=600&q=75&fit=crop&h=450" alt="" loading="lazy"></div><div class="g-body"><div class="g-cat">Social Media</div><div class="g-title">Classin Mandarin — Content</div></div></div>
+      <div class="g-card reveal" data-cat="web"><div class="g-img"><img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&q=75&fit=crop&h=450" alt="" loading="lazy"></div><div class="g-body"><div class="g-cat">Web</div><div class="g-title">Landing Page — Client Project</div></div></div>
+      <div class="g-card reveal" data-cat="print"><div class="g-img"><img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=75&fit=crop&h=450" alt="" loading="lazy"></div><div class="g-body"><div class="g-cat">Print</div><div class="g-title">Event Banner — Commercial</div></div></div>
+      <div class="g-card reveal" data-cat="branding"><div class="g-img"><img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=600&q=75&fit=crop&h=450" alt="" loading="lazy"></div><div class="g-body"><div class="g-cat">Branding</div><div class="g-title">Freelance — Brand Identity</div></div></div>
+      <div class="g-card reveal" data-cat="campaign"><div class="g-img"><img src="https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=600&q=75&fit=crop&h=450" alt="" loading="lazy"></div><div class="g-body"><div class="g-cat">Campaign</div><div class="g-title">Sakken Care — Launch Campaign</div></div></div>
+      <div class="g-card reveal" data-cat="web"><div class="g-img"><img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=600&q=75&fit=crop&h=450" alt="" loading="lazy"></div><div class="g-body"><div class="g-cat">Web</div><div class="g-title">Web App — Vercel Deploy</div></div></div>
+      <div class="g-card reveal" data-cat="social"><div class="g-img"><img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&q=75&fit=crop&h=450" alt="" loading="lazy"></div><div class="g-body"><div class="g-cat">Social Media</div><div class="g-title">Infographic — Educational Post</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASES -->
+<section id="cases">
+  <div class="container">
+    <div class="section-label">Case Studies</div>
+    <div class="case-card reveal">
+      <div class="case-header">
+        <div><div class="case-company">DEPATU · PT. Kreativitas Aset Indonesia · 2021–2026</div><div class="case-title">Building brand authority for Indonesia's premier sneaker authentication platform</div></div>
+        <div style="text-align:right"><div class="case-period">Nov 2021 – Jun 2026</div><div class="case-badge">23K → 129K followers</div></div>
+      </div>
+      <div class="case-grid">
+        <div><div class="case-blabel"><span class="case-bdot"></span>The Problem</div><div class="case-bbody">DEPATU had strong product functionality but lacked a clear brand narrative to differentiate it and build deep trust in a trust-sensitive authentication market.</div></div>
+        <div><div class="case-blabel"><span class="case-bdot"></span>Key Insight</div><div class="case-bbody">Sneaker owners aren't buying shoes — they're expressing identity. Trust in an authentication platform is about cultural credibility, not just credentials.</div></div>
+        <div><div class="case-blabel"><span class="case-bdot"></span>Approach</div><div class="case-bbody">Developed a content-first brand strategy anchored in community and education — positioning DEPATU as a trusted voice in sneaker culture, not just a platform.</div></div>
+        <div><div class="case-blabel"><span class="case-bdot"></span>Result</div><div class="case-bbody">Grew Instagram presence from 23K to 129K followers over five years. Contributed to 1–5M+ content impressions and strengthened platform credibility.</div></div>
+      </div>
+    </div>
+    <div class="case-card reveal">
+      <div class="case-header">
+        <div><div class="case-company">Sakken Care · CV. Sakken Group · 2021–2026</div><div class="case-title">Launching a premium shoe care brand in a commoditized market</div></div>
+        <div style="text-align:right"><div class="case-period">Dec 2021 – Jun 2026</div><div class="case-badge">3 → 29 drop points</div></div>
+      </div>
+      <div class="case-grid">
+        <div><div class="case-blabel"><span class="case-bdot"></span>The Problem</div><div class="case-bbody">Entering a market where shoe cleaning was seen as a commodity — differentiated only by price. Needed a strong identity to command premium pricing.</div></div>
+        <div><div class="case-blabel"><span class="case-bdot"></span>Key Insight</div><div class="case-bbody">Sneaker enthusiasts aren't looking for the cheapest service — they're looking for one they can trust with their most valued possessions.</div></div>
+        <div><div class="case-blabel"><span class="case-bdot"></span>Approach</div><div class="case-bbody">Built the complete brand from zero: positioning, visual identity, tone of voice, packaging, and content strategy focused on trust and emotional value.</div></div>
+        <div><div class="case-blabel"><span class="case-bdot"></span>Result</div><div class="case-bbody">Brand supported successful expansion from 3 to 29 drop points across Medan, establishing Sakken Care as a premium, recognizable service brand.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WRITING -->
+<section id="writing">
+  <div class="container">
+    <div class="section-label">B2B Writing Samples</div>
+    <div class="writing-grid">
+      <div class="w-card reveal-l">
+        <div class="w-platform"><div class="w-pdot"></div><span class="w-plabel">LinkedIn · Thought Leadership</span></div>
+        <div class="w-title">Why visual communication matters in industrial B2B marketing</div>
+        <div class="w-excerpt"><strong>Most industrial companies have a communication problem — not a product problem.</strong><br><br>The technology is world-class. The engineering is proven. But when it comes to talking to customers, partners, and procurement teams online, the message often gets lost in jargon, data sheets, and dense technical copy.<br><br>The companies winning attention in mining, manufacturing, and industrial sectors are not the ones with the best product. They are the ones who communicate their value in a way their audience actually understands.</div>
+        <div class="w-divider"></div>
+        <div class="w-tags"><span class="w-tag">#B2BMarketing</span><span class="w-tag">#IndustrialMarketing</span><span class="w-tag">#ContentStrategy</span><span class="w-tag">#MiningIndustry</span></div>
+      </div>
+      <div class="w-card reveal-r">
+        <div class="w-platform"><div class="w-pdot"></div><span class="w-plabel">LinkedIn · Sustainability / ESG</span></div>
+        <div class="w-title">Sustainability in manufacturing is not a trend — it's an operational decision</div>
+        <div class="w-excerpt"><strong>In 2010 — years before ESG became a boardroom priority — some manufacturers made a significant commitment: investing in clean energy for their own operations.</strong><br><br>That is not greenwashing. That is infrastructure investment in a more responsible way of building the products the mining industry depends on.<br><br>For procurement teams evaluating suppliers today, this matters more than ever. Supply chain sustainability is no longer optional — it is part of the criteria.</div>
+        <div class="w-divider"></div>
+        <div class="w-tags"><span class="w-tag">#Sustainability</span><span class="w-tag">#ESG</span><span class="w-tag">#GreenManufacturing</span><span class="w-tag">#MiningIndustry</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label">Contact</div>
+    <div class="contact-grid">
+      <div class="reveal-l">
+        <h2 class="contact-hl">Let's build something<br><em>worth sharing.</em></h2>
+        <p class="contact-sub">Open to full-time roles, freelance projects, and conversations about where design meets strategy. Based in Medan — available for on-site or remote work.</p>
+        <div class="contact-links">
+          <a href="mailto:doniandika7117@gmail.com" class="c-link"><div class="c-icon"><div class="c-icon-dot"></div></div><div><div class="c-lbl">Email</div><div class="c-val">doniandika7117@gmail.com</div></div></a>
+          <a href="https://www.linkedin.com/in/doniandika/" target="_blank" class="c-link"><div class="c-icon"><div class="c-icon-dot"></div></div><div><div class="c-lbl">LinkedIn</div><div class="c-val">linkedin.com/in/doniandika</div></div></a>
+          <a href="https://doniandika-portfolio2026.vercel.app" target="_blank" class="c-link"><div class="c-icon"><div class="c-icon-dot"></div></div><div><div class="c-lbl">Portfolio</div><div class="c-val">doniandika-portfolio2026.vercel.app</div></div></a>
+        </div>
+      </div>
+      <div class="contact-right reveal-r">
+        <a href="mailto:doniandika7117@gmail.com"><button class="c-cta-main">Send me an email ↗</button></a>
+        <a href="Doni_Andika_CV.docx" download><button class="c-cta-sec">Download CV</button></a>
+        <div class="c-note">Based in Medan · Available for on-site & remote</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-copy">© 2026 Doni Andika. All rights reserved.</div>
+    <div class="footer-right">Designed & built by Doni Andika</div>
+  </div>
+</footer>
+
+<script>
+/* ── SPLASH + HERO ENTRY ── */
+function dismissSplash(){
+  const splash=document.getElementById('splash');
+  splash.classList.add('hide');
+  setTimeout(()=>{ splash.style.display='none'; },400);
+  // Stagger hero elements in
+  const seq=[
+    ['.nav-logo',0],
+    ['.nav-links',80],
+    ['.nav-cta',120],
+    ['.hero-avail',180],
+    ['.hero-headline',280],
+    ['.hero-sub',420],
+    ['.hero-cta',540],
+    ['.hero-stats',660],
+    ['.hero-right',320],
+  ];
+  seq.forEach(([sel,delay])=>{
+    setTimeout(()=>{
+      document.querySelectorAll(sel).forEach(el=>el.classList.add('in'));
+    },delay);
+  });
+  // Start counters after stats appear
+  setTimeout(startCounters, 800);
+}
+// Dismiss after 950ms or on load — whichever is later
+let splashTimer=setTimeout(dismissSplash,950);
+window.addEventListener('load',()=>{ clearTimeout(splashTimer); setTimeout(dismissSplash,200); });
+
+/* ── COUNTER ANIMATION ── */
+function startCounters(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target=+el.dataset.count;
+    const suffix=el.dataset.suffix||'';
+    let current=0;
+    const duration=900;
+    const steps=50;
+    const increment=target/steps;
+    const timer=setInterval(()=>{
+      current=Math.min(current+increment,target);
+      el.textContent=Math.round(current)+(Math.round(current)>=target?suffix:'');
+      if(current>=target) clearInterval(timer);
+    },duration/steps);
+  });
+}
+
+/* ── PARTICLES ── */
+(()=>{
+  const wrap=document.getElementById('particles');
+  for(let i=0;i<10;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    const sz=Math.random()*3+2;
+    p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;bottom:-${sz}px;animation-duration:${Math.random()*14+8}s;animation-delay:${Math.random()*10}s`;
+    wrap.appendChild(p);
+  }
+})();
+
+/* ── 3D PHOTO TILT ── */
+const wrap3d=document.getElementById('photo3dWrap');
+const card3d=document.getElementById('photo3d');
+const shine=document.getElementById('photoShine');
+if(wrap3d && card3d){
+  wrap3d.addEventListener('mousemove',e=>{
+    const r=wrap3d.getBoundingClientRect();
+    const x=((e.clientX-r.left)/r.width-.5)*2;
+    const y=((e.clientY-r.top)/r.height-.5)*2;
+    card3d.style.transform=`rotateY(${x*13}deg) rotateX(${-y*13}deg) scale(1.025)`;
+    if(shine) shine.style.background=`radial-gradient(circle at ${50+x*35}% ${50+y*35}%,rgba(255,255,255,.2) 0%,transparent 65%)`;
+  });
+  wrap3d.addEventListener('mouseleave',()=>{
+    card3d.style.transform='rotateY(0deg) rotateX(0deg) scale(1)';
+    if(shine) shine.style.background='linear-gradient(135deg,rgba(255,255,255,.12) 0%,transparent 60%)';
+  });
+}
+/* Scroll parallax on photo */
+window.addEventListener('scroll',()=>{
+  if(card3d && window.scrollY < 700)
+    card3d.style.transform=`translateY(${window.scrollY*.03}px)`;
+},{ passive:true });
+
+/* ── NAV SCROLL STATE ── */
+const navbar=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{
+  navbar.classList.toggle('scrolled',window.scrollY>40);
+},{ passive:true });
+
+/* ── ACTIVE NAV LINK ── */
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{ if(window.scrollY>=s.offsetTop-90) cur=s.id; });
+  navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+},{ passive:true });
+
+/* ── SCROLL REVEAL ── */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }
+  });
+},{threshold:0.07,rootMargin:'0px 0px -32px 0px'});
+document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.stagger').forEach(el=>obs.observe(el));
+
+/* ── LIGHTBOX ── */
+const lbData=[
+  {img:'https://images.unsplash.com/photo-1634084462412-b54873c0a56d?w=1200&q=85&fit=crop&h=700',tag:'Branding · Sakken Care',title:'Brand Identity System from Zero',desc:'Built Sakken Care\'s complete brand from zero — logo, color system, typography, packaging, and tone of voice. Designed for both physical drop points and digital channels, the identity needed to work consistently across 29 locations across Medan. The strategic direction focused on trust, expertise, and the emotional value of well-maintained footwear.',result:'↑ 3 → 29 drop points expansion'},
+  {img:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=1200&q=85&fit=crop&h=700',tag:'Social Media · DEPATU',title:'Content Strategy & Visual System',desc:'Developed and managed the full content pipeline for DEPATU — strategy, visual design, copywriting, and scheduling across Instagram and TikTok. Created content pillars including authentication education, sneaker culture storytelling, and community spotlights. Joined at 23K followers and contributed to growing the platform to 129K over five years.',result:'↑ 23K → 129K followers · 1–5M+ impressions'},
+  {img:'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=1200&q=85&fit=crop&h=700',tag:'Print · Grafindo Digital Printing',title:'Commercial Print & Collateral Design',desc:'Completed 1,500+ design and print production projects across multiple industries over three years — banners, brochures, packaging, posters, and business collateral. Managed end-to-end workflow from client brief to print-ready files, including prepress preparation, color profiling, and quality assurance.',result:'1,500+ projects delivered across multiple industries'}
+];
+function openLB(i){
+  const d=lbData[i];
+  document.getElementById('lb-img').src=d.img;
+  document.getElementById('lb-tag').textContent=d.tag;
+  document.getElementById('lb-title').textContent=d.title;
+  document.getElementById('lb-desc').textContent=d.desc;
+  document.getElementById('lb-result').textContent=d.result;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLB(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow='';
+}
+function closeLBOutside(e){ if(e.target===document.getElementById('lightbox')) closeLB(); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLB(); });
+
+/* ── GALLERY FILTER ── */
+function filterGallery(cat,btn){
+  document.querySelectorAll('.gf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.g-card').forEach(c=>{
+    const show=cat==='all'||c.dataset.cat===cat;
+    c.style.opacity=show?'1':'0.15';
+    c.style.transform=show?'':'scale(.96)';
+    c.style.pointerEvents=show?'auto':'none';
+  });
+}
+
+/* ── HAMBURGER ── */
+let menuOpen=false;
+function toggleMenu(){
+  const links=document.querySelector('.nav-links');
+  const cta=document.querySelector('nav .nav-cta');
+  menuOpen=!menuOpen;
+  if(menuOpen){
+    links.style.cssText='display:flex;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:rgba(255,255,255,.97);padding:20px 24px;gap:16px;border-bottom:0.5px solid #ebebeb;z-index:98;backdrop-filter:blur(12px)';
+    if(cta) cta.style.cssText='display:block;margin:4px 24px 12px;width:calc(100% - 48px);text-align:center';
+  } else {
+    links.style.cssText='display:none';
+    if(cta) cta.style.cssText='display:none';
+  }
+}
+</script>
+</body>
+</html>
